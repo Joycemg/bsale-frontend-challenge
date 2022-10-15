@@ -1,6 +1,6 @@
-import productsContainer from "./selectors.js";
-import method from "./method.js";
-import render from "./render.js";
+import select from "./selectors.js";
+import method from "./methods.js";
+import render from "./renders.js";
 
 const API = axios.create({
   baseURL: "https://apibsale0.herokuapp.com/",
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (res.status === 200) {
     const products = await res.data;
     products.forEach(product => {
-      render.Product(product, productsContainer);
+      render.Product(product, select.productsContainer);
     });
   }
 });
