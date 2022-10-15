@@ -13,4 +13,18 @@ const GETProducts = async API => {
   }
 };
 
-export default { GETProducts };
+const GETProduct = async (API, id) => {
+  try {
+    const res = await API.get(`/API/products/${id}`, {
+      responseType: "json",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+};
+export default { GETProducts, GETProduct };
