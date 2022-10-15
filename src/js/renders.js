@@ -76,7 +76,10 @@ const addCartItem = (item, arrCart, select) => {
  </div>`;
 
   select.cartContent.insertAdjacentHTML("beforeend", pattern);
-  setCartValues(arrCart, select.amount);
+  setCartValues(arrCart, {
+    amount: select.amount,
+    itemValue: select.itemValue,
+  });
 };
 
 /**
@@ -90,8 +93,8 @@ const setCartValues = (arrCart, select) => {
       ? sum + ((100 - product.discount) * product.price) / 100
       : sum + product.price;
   }, 0);
-
-  select.textContent = amount;
+  select.itemValue.textContent = arrCart.length;
+  select.amount.textContent = amount;
 };
 
 /**
@@ -104,7 +107,10 @@ const setCartValues = (arrCart, select) => {
 const removeCartItem = (arrCart, id, select) => {
   select.master.remove();
   const items = arrCart.filter(item => item.productId != id);
-  setCartValues(items, select.amount);
+  setCartValues(items, {
+    amount: select.amount,
+    itemValue: select.itemValue,
+  });
   const product = [...select.products.children].find(
     product => product.dataset.id === id
   );

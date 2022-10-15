@@ -50,6 +50,7 @@ select.productContainer.addEventListener("click", async event => {
   render.addCartItem(cartItem, inCart, {
     cartContent: select.cartContent,
     amount: select.cartAmount,
+    itemValue: select.cartItemValue,
   });
 });
 
@@ -77,6 +78,7 @@ select.cartOverlay.addEventListener("click", event => {
       amount: select.cartAmount,
       master: btnRemove.parentNode.parentNode,
       products: select.productsContainer,
+      itemValue: select.cartItemValue,
     });
   }
 });

@@ -84,6 +84,7 @@ body {
   padding: 0 5px;
   border-radius: 30%;
   color: var(--mainWhite);
+  font-size: 1.3rem;
 }
 
 .hero {

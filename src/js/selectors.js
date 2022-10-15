@@ -5,6 +5,7 @@ const cartOverlay = document.querySelector(".cart-overlay");
 const cart = document.querySelector(".cart");
 const cartContent = document.querySelector(".cart-content");
 const cartAmount = document.querySelector(".cart-total");
+const cartItemValue = document.querySelector(".cart-items");
 const allContainer = document.querySelector(".container");
 
 export default {
@@ -15,5 +16,6 @@ export default {
   cart,
   cartContent,
   cartAmount,
+  cartItemValue,
   allContainer,
 };
