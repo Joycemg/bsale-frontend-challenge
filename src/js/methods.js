@@ -53,11 +53,41 @@ const GETCategories = async API => {
     });
 
     const data = res.data;
-    console.log(data);
     return data;
   } catch (err) {
     return err.response.status;
   }
 };
 
-export default { GETProducts, GETProduct, GETCategories };
+const GETProductsByCategory = async (API, id) => {
+  try {
+    const res = await API.get(`/API/category/${id}`, {
+      responseType: "json",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    const data = res.data;
+    const newData = data.map((currentValue, index, array) => {
+      if (!currentValue.url_image) {
+        array.forEach(product => {
+          if (product.name === currentValue.name && product.url_image) {
+            currentValue.url_image = product.url_image;
+          }
+        });
+      }
+      return currentValue;
+    });
+
+    return newData;
+  } catch (err) {
+    return err.response.status;
+  }
+};
+export default {
+  GETProducts,
+  GETProduct,
+  GETCategories,
+  GETProductsByCategory,
+};

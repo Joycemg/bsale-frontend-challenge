@@ -17,18 +17,9 @@ setTimeout(() => {
 
 /* Waiting for the DOM to be loaded and then it is calling the GETProducts method from the methods.js
 file. */
-document.addEventListener("DOMContentLoaded", async () => {
-  const categories = await method.GETCategories(API);
-  if (categories[0]) {
-    render.category(categories, {
-      categoriesContainer: select.categoriesContainer,
-      banner: select.banner,
-    });
-  } else {
-    console.log("problem loading categories ", categories);
-  }
+const products = async () => {
   const products = await method.GETProducts(API);
-  if (products[0]) {
+  if (products !== 404) {
     const containerAllProduct = document.createElement("div");
     containerAllProduct.className = "products-center";
     select.productContainer.insertAdjacentElement(
@@ -40,17 +31,50 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     console.log("problem loading products ", products);
   }
+};
+document.addEventListener("DOMContentLoaded", async () => {
+  const categories = await method.GETCategories(API);
+  if (categories !== 404) {
+    render.category(categories, {
+      categoriesContainer: select.categoriesContainer,
+      banner: select.banner,
+    });
+  } else {
+    console.log("problem loading categories ", categories);
+  }
+  products();
 });
 
+select.categoriesContainer.addEventListener("click", async event => {
+  const target = event.target;
+  if (target.tagName !== "LI") return;
+  const products = await method.GETProductsByCategory(API, target.dataset.id);
+  if (products === 404) return;
+  const productsContainer = document.querySelector(".products-center");
+  select.allCategory.style.visibility = "visible";
+  render.Search(products, {
+    productsContainer: productsContainer,
+    containerAllproduct: select.productContainer,
+  });
+});
+select.allCategory.addEventListener("click", () => {
+  select.allCategory.style.visibility = "collapse";
+  const productsContainer = document.querySelector(".products-center");
+  productsContainer.remove();
+  products();
+});
 select.inputSearch.addEventListener("input", async () => {
   const search = select.inputSearch.value;
   const products = await method.GETProducts(API, search);
+  if (products === 404) return;
+
   const productsContainer = document.querySelector(".products-center");
   render.Search(products, {
     productsContainer: productsContainer,
     containerAllproduct: select.productContainer,
   });
 });
+
 /* Adding an event listener to the cart button. When the button is clicked, it will render the cart. */
 select.cartBtn.addEventListener("click", () => {
   render.Cart({
@@ -100,7 +124,6 @@ select.cartOverlay.addEventListener("click", event => {
     const btnRemove = event.target;
     const id = btnRemove.dataset.id;
     const productsContainer = document.querySelector(".products-center");
-    console.log(btnRemove);
 
     inCart = render.removeCartItem(inCart, id, {
       cartContent: select.cartContent,

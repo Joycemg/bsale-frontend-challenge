@@ -29,6 +29,7 @@ const Product = async (products, select) => {
                         data-id=${Pk}><i class="fas fa-shopping-cart"></i>Agregar al carrito</button>
         </div>
         <div class="description">
+        ${product.category ? `<h5>${product.category.name}</h5>` : ""}
         <h3>${product.name}</h3>
         ${
           product.discount
@@ -50,7 +51,7 @@ const category = async (categories, select) => {
   select.banner.style.visibility = "visible";
   categories.forEach(category => {
     const pattern = /*html*/ `
-      <li data-id=${category.id}><h4>${category.name}</h4></li>
+      <li data-id=${category.id}>${category.name}</li>
     `;
 
     select.categoriesContainer.insertAdjacentHTML("beforeend", pattern);

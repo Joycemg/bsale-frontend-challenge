@@ -1,5 +1,6 @@
 const cartBtn = document.querySelector(".cart-btn");
 const categoriesContainer = document.querySelector(".category");
+const allCategory = document.querySelector("#allp");
 const banner = document.querySelector(".banner");
 const productContainer = document.querySelector(".products");
 const cartOverlay = document.querySelector(".cart-overlay");
@@ -22,4 +23,5 @@ export default {
   inputSearch,
   categoriesContainer,
   banner,
+  allCategory,
 };

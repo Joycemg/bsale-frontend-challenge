@@ -131,7 +131,8 @@ body {
   padding: 0.2rem 0.75rem;
   letter-spacing: var(--mainSpacing);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 @media (max-width: 600px) {
@@ -140,13 +141,16 @@ body {
     flex-direction: column;
   }
   .category li {
-    width: 10rem;
+    width: 20rem;
     height: 5rem;
   }
 }
 
 .category li:hover {
   color: var(--mainWhite);
+}
+.category li:active {
+  font-size: 1.2rem;
 }
 /* products */
 .products {
