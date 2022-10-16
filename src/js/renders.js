@@ -46,6 +46,23 @@ const Product = async (products, select) => {
   });
 };
 
+/**
+ * Removes the existing product container, creates a new one and inserts it into the DOM.
+ * @returns the productContainer element.
+ */
+const createProductContainer = select => {
+  document.querySelector(".products-center")?.remove();
+  const productContainer = document.createElement("div");
+  productContainer.className = "products-center";
+  select.insertAdjacentElement("beforeend", productContainer);
+  return document.querySelector(".products-center");
+};
+
+/**
+ * It takes in an array of categories and a select object, and then it inserts the categories into the DOM
+ * @param categories - The categories array from the API.
+ * @param select - This is the object that contains all the selectors.
+ */
 const category = async (categories, select) => {
   if (categories === 404) return;
   select.banner.style.visibility = "visible";
@@ -57,15 +74,14 @@ const category = async (categories, select) => {
     select.categoriesContainer.insertAdjacentHTML("beforeend", pattern);
   });
 };
+
+/**
+ * Takes an array of products and a selection element, creates a product container, and then passes the products and the product container to the Product function for rendering.
+ * @param products - an array of objects that contain the product information
+ * @param select - the selector of the div that will have the product container
+ */
 const Search = (products, select) => {
-  select.productsContainer.remove();
-  const containerAllProduct = document.createElement("div");
-  containerAllProduct.className = "products-center";
-  select.containerAllproduct.insertAdjacentElement(
-    "beforeend",
-    containerAllProduct
-  );
-  const productsContainer = document.querySelector(".products-center");
+  const productsContainer = createProductContainer(select);
   Product(products, productsContainer);
 };
 
@@ -78,7 +94,7 @@ const Search = (products, select) => {
 const addCartItem = (item, arrCart, select) => {
   const pattern = /*html*/ `
   <div class="cart-item" data-id=${item.productId}>
-      <img src=${item.url_image}
+      <img src=${item.url_image ? `${item.url_image}` : "img/nofound.png"}
       }
            alt="product image">
       <div>
@@ -112,9 +128,9 @@ const addCartItem = (item, arrCart, select) => {
 };
 
 /**
- * It takes an array of products and a selector, and returns the total amount of the products in the array.
- * @param arrCart - the array of products in the cart
- * @param select - the select element
+ * Takes an array of products and a selector object, and sets the number of items in the cart and the value of the cart quantity.
+ * @param arrCart - is an array of objects containing the products in the cart
+ * @param select - is the object containing the selectors for the cart
  */
 const setCartValues = (arrCart, select) => {
   const amount = arrCart.reduce((sum, product) => {
@@ -127,11 +143,11 @@ const setCartValues = (arrCart, select) => {
 };
 
 /**
- * It removes the item from the cart, updates the cart values, and enables the add to cart button
+ * Removes the item from the cart, updates the cart values and re-enables the add to cart button.
  * @param arrCart - The array of items in the cart.
- * @param id - The id of the product that we want to remove from the cart.
- * @param select - is the object that contains the cart, the amount and the products
- * @returns The items array.
+ * @param id - The id of the product to remove from the cart.
+ * @param select - The object containing the cart, amount and quantity of the item.
+ * @returns - The array of items.
  */
 const removeCartItem = (arrCart, id, select) => {
   select.master.remove();
@@ -177,4 +193,5 @@ export default {
   addCartItem,
   removeCartItem,
   category,
+  createProductContainer,
 };
