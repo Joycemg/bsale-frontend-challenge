@@ -6,20 +6,20 @@
  */
 const GETProducts = async (API, search) => {
   try {
-    const res = await API.get(`/API/products`, {
+    const res = await API.get('/API/products', {
       params: {
-        search: search,
+        search,
       },
-      responseType: "json",
+      responseType: 'json',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     });
-    const data = res.data;
+    const { data } = res;
     const newData = data.map((currentValue, index, array) => {
       if (!currentValue.url_image) {
-        array.forEach(product => {
+        array.forEach((product) => {
           if (product.name === currentValue.name && product.url_image) {
             currentValue.url_image = product.url_image;
           }
@@ -42,10 +42,10 @@ const GETProducts = async (API, search) => {
 const GETProduct = async (API, id) => {
   try {
     const res = await API.get(`/API/products/${id}`, {
-      responseType: "json",
+      responseType: 'json',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     });
     return res.data;
@@ -58,17 +58,17 @@ const GETProduct = async (API, id) => {
  * It makes a GET request to the API endpoint /API/category/ and returns the data
  * @returns The data from the API call.
  */
-const GETCategories = async API => {
+const GETCategories = async (API) => {
   try {
-    const res = await API.get(`/API/category/`, {
-      responseType: "json",
+    const res = await API.get('/API/category/', {
+      responseType: 'json',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     });
 
-    const data = res.data;
+    const { data } = res;
     return data;
   } catch (err) {
     return err.response.status;
@@ -84,16 +84,16 @@ const GETCategories = async API => {
 const GETProductsByCategory = async (API, id) => {
   try {
     const res = await API.get(`/API/category/${id}`, {
-      responseType: "json",
+      responseType: 'json',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     });
-    const data = res.data;
+    const { data } = res;
     const newData = data.map((currentValue, index, array) => {
       if (!currentValue.url_image) {
-        array.forEach(product => {
+        array.forEach((product) => {
           if (product.name === currentValue.name && product.url_image) {
             currentValue.url_image = product.url_image;
           }

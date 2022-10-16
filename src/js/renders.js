@@ -5,44 +5,44 @@
  */
 const Product = async (products, select) => {
   if (products === 404) return;
-  products.forEach(product => {
+  products.forEach((product) => {
     const Pk = `${product.productId}`;
-    const pattern = /*html*/ `
+    const pattern = /* html */ `
     <article data-id=${Pk} class="product">
     <div class="img-container">
         
               ${
-                product.discount
-                  ? `<div class="discount-container">
+  product.discount
+    ? `<div class="discount-container">
                         <h5>OFERTA! </h5>
                         <h5>${product.discount}%</h5>
                     </div>`
-                  : ""
-              }
+    : ''
+}
      
                 <img src=${
-                  product.url_image ? `${product.url_image}` : "img/nofound.png"
-                }
+  product.url_image ? `${product.url_image}` : 'img/nofound.png'
+}
                     alt="Product image"
                     class="product-img">
                 <button class="bag-btn"
                         data-id=${Pk}><i class="fas fa-shopping-cart"></i>Agregar al carrito</button>
         </div>
         <div class="description">
-        ${product.category ? `<h5>${product.category.name}</h5>` : ""}
+        ${product.category ? `<h5>${product.category.name}</h5>` : ''}
         <h3>${product.name}</h3>
         ${
-          product.discount
-            ? `<h5 style='text-decoration: line-through; font-size: 1.5rem';>$${
-                product.price
-              } <h4>$${((100 - product.discount) * product.price) / 100}</h4>`
-            : `<h4>$${product.price}</h4>`
-        }
+  product.discount
+    ? `<h5 style='text-decoration: line-through; font-size: 1.5rem';>$${
+      product.price
+    } <h4>$${((100 - product.discount) * product.price) / 100}</h4>`
+    : `<h4>$${product.price}</h4>`
+}
 
 
         </div>
     </article>`;
-    select.insertAdjacentHTML("beforeend", pattern);
+    select.insertAdjacentHTML('beforeend', pattern);
   });
 };
 
@@ -50,12 +50,12 @@ const Product = async (products, select) => {
  * Removes the existing product container, creates a new one and inserts it into the DOM.
  * @returns the productContainer element.
  */
-const createProductContainer = select => {
-  document.querySelector(".products-center")?.remove();
-  const productContainer = document.createElement("div");
-  productContainer.className = "products-center";
-  select.insertAdjacentElement("beforeend", productContainer);
-  return document.querySelector(".products-center");
+const createProductContainer = (select) => {
+  document.querySelector('.products-center')?.remove();
+  const productContainer = document.createElement('div');
+  productContainer.className = 'products-center';
+  select.insertAdjacentElement('beforeend', productContainer);
+  return document.querySelector('.products-center');
 };
 
 /**
@@ -65,13 +65,13 @@ const createProductContainer = select => {
  */
 const category = async (categories, select) => {
   if (categories === 404) return;
-  select.banner.style.visibility = "visible";
-  categories.forEach(category => {
-    const pattern = /*html*/ `
+  select.banner.style.visibility = 'visible';
+  categories.forEach((category) => {
+    const pattern = /* html */ `
       <li data-id=${category.id}>${category.name}</li>
     `;
 
-    select.categoriesContainer.insertAdjacentHTML("beforeend", pattern);
+    select.categoriesContainer.insertAdjacentHTML('beforeend', pattern);
   });
 };
 
@@ -86,26 +86,39 @@ const Search = (products, select) => {
 };
 
 /**
+ * Takes an array of products and a selector object, and sets the number of items in the cart and the value of the cart quantity.
+ * @param arrCart - is an array of objects containing the products in the cart
+ * @param select - is the object containing the selectors for the cart
+ */
+const setCartValues = (arrCart, select) => {
+  const amount = arrCart.reduce((sum, product) => (product.discount
+    ? sum + ((100 - product.discount) * product.price) / 100
+    : sum + product.price), 0);
+  select.itemValue.textContent = arrCart.length;
+  select.amount.textContent = amount;
+};
+
+/**
  * It takes an item, an array of items, and a selector object as arguments, and then inserts a pattern of HTML into the cartContent element of the selector object
  * @param item - the item that we want to add to the cart
  * @param arrCart - the array of objects that contains the cart items
  * @param select - is an object that contains all the selectors of the cart.
  */
 const addCartItem = (item, arrCart, select) => {
-  const pattern = /*html*/ `
+  const pattern = /* html */ `
   <div class="cart-item" data-id=${item.productId}>
-      <img src=${item.url_image ? `${item.url_image}` : "img/nofound.png"}
+      <img src=${item.url_image ? `${item.url_image}` : 'img/nofound.png'}
       }
            alt="product image">
       <div>
             <h4>${item.name}</h4>
                     ${
-                      item.discount
-                        ? `<h5>$${
-                            ((100 - item.discount) * item.price) / 100
-                          }</h5>`
-                        : `<h5>$${item.price}</h5>`
-                    }
+  item.discount
+    ? `<h5>$${
+      ((100 - item.discount) * item.price) / 100
+    }</h5>`
+    : `<h5>$${item.price}</h5>`
+}
  
             <span class="remove-item"
                   data-id=${item.productId}>Eliminar</span>
@@ -120,26 +133,11 @@ const addCartItem = (item, arrCart, select) => {
       </div>;
  </div>`;
 
-  select.cartContent.insertAdjacentHTML("beforeend", pattern);
+  select.cartContent.insertAdjacentHTML('beforeend', pattern);
   setCartValues(arrCart, {
     amount: select.amount,
     itemValue: select.itemValue,
   });
-};
-
-/**
- * Takes an array of products and a selector object, and sets the number of items in the cart and the value of the cart quantity.
- * @param arrCart - is an array of objects containing the products in the cart
- * @param select - is the object containing the selectors for the cart
- */
-const setCartValues = (arrCart, select) => {
-  const amount = arrCart.reduce((sum, product) => {
-    return product.discount
-      ? sum + ((100 - product.discount) * product.price) / 100
-      : sum + product.price;
-  }, 0);
-  select.itemValue.textContent = arrCart.length;
-  select.amount.textContent = amount;
 };
 
 /**
@@ -151,17 +149,17 @@ const setCartValues = (arrCart, select) => {
  */
 const removeCartItem = (arrCart, id, select) => {
   select.master.remove();
-  const items = arrCart.filter(item => item.productId != id);
+  const items = arrCart.filter((item) => item.productId != id);
   setCartValues(items, {
     amount: select.amount,
     itemValue: select.itemValue,
   });
   const product = [...select.products.children].find(
-    product => product.dataset.id === id
+    (product) => product.dataset.id === id,
   );
   const btn = product.firstElementChild.lastElementChild;
   btn.disabled = false;
-  btn.textContent = "Agregar al carrito";
+  btn.textContent = 'Agregar al carrito';
   return items;
 };
 
@@ -169,20 +167,20 @@ const removeCartItem = (arrCart, id, select) => {
  * When the user clicks on the cart icon, the overlay, cart, and container will all be displayed.
  * @param select - is the object that contains select the cart, overlay, container
  */
-const Cart = select => {
-  select.overlay.classList.add("transparentBcg");
-  select.cart.classList.add("showCart");
-  select.container.classList.add("blur");
+const Cart = (select) => {
+  select.overlay.classList.add('transparentBcg');
+  select.cart.classList.add('showCart');
+  select.container.classList.add('blur');
 };
 
 /**
  * When the user clicks on the close button, remove the transparent background, remove the showCart class, and remove the blur class.
  * @param select - is the object that contains select the cart, overlay, container
  */
-const hideCart = select => {
-  select.overlay.classList.remove("transparentBcg");
-  select.cart.classList.remove("showCart");
-  select.container.classList.remove("blur");
+const hideCart = (select) => {
+  select.overlay.classList.remove('transparentBcg');
+  select.cart.classList.remove('showCart');
+  select.container.classList.remove('blur');
 };
 
 export default {
