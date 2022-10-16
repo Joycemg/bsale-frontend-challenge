@@ -3,9 +3,11 @@
  * @param product - is the product object that we are going to use to create the HTML.
  * @param select - The element where the product will be inserted.
  */
-const Product = async (product, select) => {
-  const Pk = `${product.productId}`;
-  const pattern = /*html*/ `
+const Product = async (products, select) => {
+  if (products === 404) return;
+  products.forEach(product => {
+    const Pk = `${product.productId}`;
+    const pattern = /*html*/ `
     <article data-id=${Pk} class="product">
     <div class="img-container">
         
@@ -18,7 +20,9 @@ const Product = async (product, select) => {
                   : ""
               }
      
-                <img src=${product.url_image}
+                <img src=${
+                  product.url_image ? `${product.url_image}` : "img/nofound.png"
+                }
                     alt="Product image"
                     class="product-img">
                 <button class="bag-btn"
@@ -37,8 +41,31 @@ const Product = async (product, select) => {
 
         </div>
     </article>`;
+    select.insertAdjacentHTML("beforeend", pattern);
+  });
+};
 
-  select.insertAdjacentHTML("beforeend", pattern);
+const category = async (categories, select) => {
+  if (categories === 404) return;
+  select.banner.style.visibility = "visible";
+  categories.forEach(category => {
+    const pattern = /*html*/ `
+      <li data-id=${category.id}><h4>${category.name}</h4></li>
+    `;
+
+    select.categoriesContainer.insertAdjacentHTML("beforeend", pattern);
+  });
+};
+const Search = (products, select) => {
+  select.productsContainer.remove();
+  const containerAllProduct = document.createElement("div");
+  containerAllProduct.className = "products-center";
+  select.containerAllproduct.insertAdjacentElement(
+    "beforeend",
+    containerAllProduct
+  );
+  const productsContainer = document.querySelector(".products-center");
+  Product(products, productsContainer);
 };
 
 /**
@@ -51,6 +78,7 @@ const addCartItem = (item, arrCart, select) => {
   const pattern = /*html*/ `
   <div class="cart-item" data-id=${item.productId}>
       <img src=${item.url_image}
+      }
            alt="product image">
       <div>
             <h4>${item.name}</h4>
@@ -142,8 +170,10 @@ const hideCart = select => {
 
 export default {
   Product,
+  Search,
   Cart,
   hideCart,
   addCartItem,
   removeCartItem,
+  category,
 };

@@ -1,5 +1,6 @@
 const cartBtn = document.querySelector(".cart-btn");
-const productsContainer = document.querySelector(".products-center");
+const categoriesContainer = document.querySelector(".category");
+const banner = document.querySelector(".banner");
 const productContainer = document.querySelector(".products");
 const cartOverlay = document.querySelector(".cart-overlay");
 const cart = document.querySelector(".cart");
@@ -7,10 +8,10 @@ const cartContent = document.querySelector(".cart-content");
 const cartAmount = document.querySelector(".cart-total");
 const cartItemValue = document.querySelector(".cart-items");
 const allContainer = document.querySelector(".container");
+const inputSearch = document.querySelector(".search-input");
 
 export default {
   cartBtn,
-  productsContainer,
   productContainer,
   cartOverlay,
   cart,
@@ -18,4 +19,7 @@ export default {
   cartAmount,
   cartItemValue,
   allContainer,
+  inputSearch,
+  categoriesContainer,
+  banner,
 };

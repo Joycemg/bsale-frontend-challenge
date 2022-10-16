@@ -4,27 +4,55 @@ import render from "./renders.js";
 
 /* Creating an empty array that will be used to store the products that are added to the cart. */
 let inCart = [];
-
 /* Creating an axios instance with the baseURL and timeout. */
 const API = axios.create({
   baseURL: "https://apibsale0.herokuapp.com/",
   timeout: 5000,
+  headers: { "X-Custom-Header": "foobar" },
 });
+
+setTimeout(() => {
+  document.body.style.opacity = 1;
+}, "1000");
 
 /* Waiting for the DOM to be loaded and then it is calling the GETProducts method from the methods.js
 file. */
 document.addEventListener("DOMContentLoaded", async () => {
-  const res = await method.GETProducts(API);
-  if (res.status === 200) {
-    const products = await res.data;
-    products.forEach(product => {
-      render.Product(product, select.productsContainer);
+  const categories = await method.GETCategories(API);
+  if (categories[0]) {
+    render.category(categories, {
+      categoriesContainer: select.categoriesContainer,
+      banner: select.banner,
     });
+  } else {
+    console.log("problem loading categories ", categories);
+  }
+  const products = await method.GETProducts(API);
+  if (products[0]) {
+    const containerAllProduct = document.createElement("div");
+    containerAllProduct.className = "products-center";
+    select.productContainer.insertAdjacentElement(
+      "beforeend",
+      containerAllProduct
+    );
+    const productsContainer = document.querySelector(".products-center");
+    render.Product(products, productsContainer);
+  } else {
+    console.log("problem loading products ", products);
   }
 });
 
+select.inputSearch.addEventListener("input", async () => {
+  const search = select.inputSearch.value;
+  const products = await method.GETProducts(API, search);
+  const productsContainer = document.querySelector(".products-center");
+  render.Search(products, {
+    productsContainer: productsContainer,
+    containerAllproduct: select.productContainer,
+  });
+});
 /* Adding an event listener to the cart button. When the button is clicked, it will render the cart. */
-select.cartBtn.addEventListener("click", event => {
+select.cartBtn.addEventListener("click", () => {
   render.Cart({
     overlay: select.cartOverlay,
     cart: select.cart,
@@ -55,7 +83,7 @@ select.productContainer.addEventListener("click", async event => {
 });
 
 /* This is an event listener that is listening for a click on the cart overlay. If the click is on the
-fas fa-window-close or the cart-overlay transparentBcg, it will hide the cart. If the click is on the remove-item, it will remove the item from the cart. */
+fas fa-window-close or the cart-overlay, it will hide the cart. If the click is on the remove-item, it will remove the item from the cart. */
 select.cartOverlay.addEventListener("click", event => {
   if (
     event.target.className === "fas fa-window-close" ||
@@ -71,13 +99,14 @@ select.cartOverlay.addEventListener("click", event => {
   if (event.target.className === "remove-item") {
     const btnRemove = event.target;
     const id = btnRemove.dataset.id;
+    const productsContainer = document.querySelector(".products-center");
     console.log(btnRemove);
 
     inCart = render.removeCartItem(inCart, id, {
       cartContent: select.cartContent,
       amount: select.cartAmount,
       master: btnRemove.parentNode.parentNode,
-      products: select.productsContainer,
+      products: productsContainer,
       itemValue: select.cartItemValue,
     });
   }
